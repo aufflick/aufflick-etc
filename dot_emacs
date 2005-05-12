@@ -1,0 +1,167 @@
+;; Red Hat Linux default .emacs initialization file  ; -*- mode: emacs-lisp -*-
+
+;; Set up the keyboard so the delete key on both the regular keyboard
+;; and the keypad delete the character under the cursor and to the right
+;; under X, instead of the default, backspace behavior.
+(global-set-key [delete] 'delete-char)
+(global-set-key [kp-delete] 'delete-char)
+
+;; turn on font-lock mode
+(global-font-lock-mode t)
+;; enable visual feedback on selections
+(setq-default transient-mark-mode t)
+
+;; always end a file with a newline
+(setq require-final-newline t)
+
+;; stop at the end of the file, not just add lines
+(setq next-line-add-newlines nil)
+
+(when window-system
+  ;; enable wheelmouse support by default
+  (mwheel-install)
+  ;; use extended compound-text coding for X clipboard
+  (set-selection-coding-system 'compound-text-with-extensions))
+
+
+(custom-set-variables
+  ;; custom-set-variables was added by Custom -- don't edit or cut/paste it!
+  ;; Your init file should contain only one such instance.
+ '(ansi-color-for-comint-mode t)
+ '(bbdb-complete-name-allow-cycling t)
+ '(browse-url-generic-program "mozilla")
+ '(browse-url-netscape-program "/opt/firefox/firefox")
+ '(c-tab-always-indent nil)
+ '(case-fold-search t)
+ '(column-number-mode t)
+ '(cperl-clobber-lisp-bindings t)
+ '(cperl-electric-keywords t)
+ '(cperl-electric-linefeed t)
+ '(cperl-electric-parens t)
+ '(cperl-font-lock t)
+ '(cperl-hairy t)
+ '(cperl-indent-level 4)
+ '(cperl-info-on-command-no-prompt t)
+ '(cperl-lazy-help-time 3)
+ '(flymake-allowed-file-name-masks (quote ((".+\\.c$" flymake-simple-make-init flymake-simple-cleanup flymake-get-real-file-name) (".+\\.pm$" flymake-perl-init flymake-simple-cleanup flymake-get-real-file-name) (".+\\.comp$" flymake-perl-init flymake-simple-cleanup flymake-get-real-file-name) (".+\\.pl$" flymake-perl-init flymake-simple-cleanup flymake-get-real-file-name) (".+\\.java$" flymake-simple-make-java-init flymake-simple-java-cleanup flymake-get-real-file-name) (".+[0-9]+\\.tex$" flymake-master-tex-init flymake-master-cleanup flymake-get-real-file-name) (".+\\.tex$" flymake-simple-tex-init flymake-simple-cleanup flymake-get-real-file-name) (".+\\.idl$" flymake-simple-make-init flymake-simple-cleanup flymake-get-real-file-name))))
+ '(grep-command "find . -name \"*\" |xargs grep -n -e ")
+ '(indent-tabs-mode nil)
+ '(inhibit-c-tab-always-indent nil)
+ '(ispell-dictionary-alist (quote (("british" "[A-Za-z]" "[^A-Za-z]" "[']" nil ("-B") nil iso-8859-1) ("american" "[A-Za-z]" "[^A-Za-z]" "[']" nil ("-B") nil iso-8859-1) ("brasileiro" "[A-ZÁÉÍÓÚÀÈÌÒÙÃÕÇÜÂÊÔa-záéíóúàèìòùãõçüâêô]" "[^A-ZÁÉÍÓÚÀÈÌÒÙÃÕÇÜÂÊÔa-záéíóúàèìòùãõçüâêô]" "[']" nil ("-d" "brasileiro") nil iso-8859-1) ("british" "[A-Za-z]" "[^A-Za-z]" "[']" nil ("-B" "-d" "british") nil iso-8859-1) ("castellano" "[A-ZÁÉÍÑÓÚÜa-záéíñóúü]" "[^A-ZÁÉÍÑÓÚÜa-záéíñóúü]" "[-]" nil ("-B" "-d" "castellano") "~tex" iso-8859-1) ("castellano8" "[A-ZÁÉÍÑÓÚÜa-záéíñóúü]" "[^A-ZÁÉÍÑÓÚÜa-záéíñóúü]" "[-]" nil ("-B" "-d" "castellano") "~latin1" iso-8859-1) ("czech" "[A-Za-zÁÉÌÍÓÚÙİ®©ÈØÏ«Òáéìíóúùı¾¹èøï»ò]" "[^A-Za-zÁÉÌÍÓÚÙİ®©ÈØÏ«Òáéìíóúùı¾¹èøï»ò]" "" nil ("-B" "-d" "czech") nil iso-8859-2) ("dansk" "[A-ZÆØÅa-zæøå]" "[^A-ZÆØÅa-zæøå]" "[']" nil ("-C") nil iso-8859-1) ("deutsch" "[a-zA-Z\"]" "[^a-zA-Z\"]" "[']" t ("-C") "~tex" iso-8859-1) ("deutsch8" "[a-zA-ZÄÖÜäößü]" "[^a-zA-ZÄÖÜäößü]" "[']" t ("-C" "-d" "deutsch") "~latin1" iso-8859-1) ("english" "[A-Za-z]" "[^A-Za-z]" "[']" nil ("-B") nil iso-8859-1) ("esperanto" "[A-Za-z¦¬¶¼ÆØİŞæøış]" "[^A-Za-z¦¬¶¼ÆØİŞæøış]" "[-']" t ("-C") "~latin3" iso-8859-1) ("esperanto-tex" "[A-Za-z^\\]" "[^A-Za-z^\\]" "[-'`\"]" t ("-C" "-d" "esperanto") "~tex" iso-8859-1) ("francais7" "[A-Za-z]" "[^A-Za-z]" "[`'^---]" t nil nil iso-8859-1) ("francais" "[A-Za-zÀÂÆÇÈÉÊËÎÏÔÙÛÜàâçèéêëîïôùûü]" "[^A-Za-zÀÂÆÇÈÉÊËÎÏÔÙÛÜàâçèéêëîïôùûü]" "[-']" t nil "~list" iso-8859-1) ("francais-tex" "[A-Za-zÀÂÆÇÈÉÊËÎÏÔÙÛÜàâçèéêëîïôùûü\\]" "[^A-Za-zÀÂÆÇÈÉÊËÎÏÔÙÛÜàâçèéêëîïôùûü\\]" "[-'^`\"]" t nil "~tex" iso-8859-1) ("german" "[a-zA-Z\"]" "[^a-zA-Z\"]" "[']" t ("-C") "~tex" iso-8859-1) ("german8" "[a-zA-ZÄÖÜäößü]" "[^a-zA-ZÄÖÜäößü]" "[']" t ("-C" "-d" "german") "~latin1" iso-8859-1) ("italiano" "[A-ZÀÁÈÉÌÍÒÓÙÚa-zàáèéìíóùú]" "[^A-ZÀÁÈÉÌÍÒÓÙÚa-zàáèéìíóùú]" "[-]" nil ("-B" "-d" "italian") "~tex" iso-8859-1) ("nederlands" "[A-Za-zÀ-ÅÇÈ-ÏÒ-ÖÙ-Üà-åçè-ïñò-öù-ü]" "[^A-Za-zÀ-ÅÇÈ-ÏÒ-ÖÙ-Üà-åçè-ïñò-öù-ü]" "[']" t ("-C") nil iso-8859-1) ("nederlands8" "[A-Za-zÀ-ÅÇÈ-ÏÒ-ÖÙ-Üà-åçè-ïñò-öù-ü]" "[^A-Za-zÀ-ÅÇÈ-ÏÒ-ÖÙ-Üà-åçè-ïñò-öù-ü]" "[']" t ("-C") nil iso-8859-1) ("norsk" "[A-Za-zÅÆÇÈÉÒÔØåæçèéòôø]" "[^A-Za-zÅÆÇÈÉÒÔØåæçèéòôø]" "[\"]" nil ("-d" "norsk") "~list" iso-8859-1) ("norsk7-tex" "[A-Za-z{}\\'^`]" "[^A-Za-z{}\\'^`]" "[\"]" nil ("-d" "norsk") "~plaintex" iso-8859-1) ("polish" "[A-Za-z¡£¦¬¯±³¶¼¿ÆÊÑÓæêñó]" "[^A-Za-z¡£¦¬¯±³¶¼¿ÆÊÑÓæêñó]" "" nil ("-d" "polish") nil iso-8859-2) ("russian" "[áâ÷çäå³öúéêëìíîïğòóôõæèãşûıøùÿüàñÁÂ×ÇÄÅ£ÖÚÉÊËÌÍÎÏĞÒÓÔÕÆÈÃŞÛİØÙßÜÀÑ]" "[^áâ÷çäå³öúéêëìíîïğòóôõæèãşûıøùÿüàñÁÂ×ÇÄÅ£ÖÚÉÊËÌÍÎÏĞÒÓÔÕÆÈÃŞÛİØÙßÜÀÑ]" "" nil ("-d" "russian") nil koi8-r) ("svenska" "[A-Za-zåäöéàüèæøçÅÄÖÉÀÜÈÆØÇ]" "[^A-Za-zåäöéàüèæøçÅÄÖÉÀÜÈÆØÇ]" "[']" nil ("-C") "~list" iso-8859-1) ("portugues" "[a-zA-ZÁÂÉÓàáâéêíóãú]" "[^a-zA-ZÁÂÉÓàáâéêíóãú]" "[']" t ("-C" "-d" "portugues") "~latin1" iso-8859-1) ("slovak" "[A-Za-zÁÄÉÍÓÚÔÀÅ¥İ®©ÈÏ«Òáäéíóúôàåµı¾¹èï»ò]" "[^A-Za-zÁÄÉÍÓÚÔÀÅ¥İ®©ÈÏ«Òáäéíóúôàåµı¾¹èï»ò]" "" nil ("-B" "-d" "slovak") nil iso-8859-2))))
+ '(ispell-local-dictionary "british")
+ '(ispell-personal-dictionary nil)
+ '(message-forward-as-mime nil)
+ '(mh-compose-prompt-flag nil)
+ '(mh-letter-complete-function (quote bbdb-complete-name))
+ '(mouse-wheel-follow-mouse t)
+ '(mouse-wheel-mode t nil (mwheel))
+ '(ps-n-up-printing 2)
+ '(ps-paper-type (quote a4))
+ '(ps-printer-name t)
+ '(rmail-enable-mime t t)
+ '(rmail-movemail-program "movemail")
+ '(rmail-pop-password "tifnowoo")
+ '(rmail-pop-password-required t)
+ '(rmail-preserve-inbox nil)
+ '(rmail-primary-inbox-list (quote ("po:mark.aufflick" "/var/spool/mail/aufflick")) t)
+ '(rmail-user-mail-address-regexp nil t)
+ '(save-place t nil (saveplace))
+ '(server-switch-hook (quote (raise-frame)))
+ '(show-paren-mode t nil (paren))
+ '(sql-postgres-options (quote ("-p 5432" "-P" "pager=off")))
+ '(sql-postgres-program "/usr/bin/psql")
+ '(tab-stop 4 t)
+ '(tab-stop-list (quote (4 8 12 16 20 24 28 32 36 40 44 48 52 56 60 64)))
+ '(tab-width 4)
+ '(tooltip-delay 1.3)
+ '(transient-mark-mode t)
+ '(uniquify-buffer-name-style (quote forward) nil (uniquify))
+ '(user-full-name "Mark Aufflick")
+ '(user-mail-address "mark.aufflick@optusnet.com.au")
+ '(vip-re-query-replace t))
+
+; SQL stuff
+
+(defun my-sql-mode-hook ()
+	(define-key sql-mode-map "\C-m" 'newline-and-indent)
+	(define-key sql-mode-map "\t" 'tab-to-tab-stop)
+	(setq indent-line-function 'indent-relative-maybe))
+(add-hook 'sql-mode-hook 'my-sql-mode-hook)
+
+; OpenACS stuff
+
+(defun my-tcl-mode-hook ()
+	(define-key tcl-mode-map "\C-m" 'newline-and-indent))
+(add-hook 'tcl-mode-hook 'my-tcl-mode-hook)
+
+(setq auto-mode-alist
+      (append '(("\\.adp$" . html-mode)
+                ("\\.tpl$" . html-mode)
+                ("\\.inc$" . php-mode))
+              auto-mode-alist))
+
+
+
+(custom-set-faces
+  ;; custom-set-faces was added by Custom -- don't edit or cut/paste it!
+  ;; Your init file should contain only one such instance.
+ '(cperl-hash-face ((t (:background "lightyellow2" :foreground "Red" :weight bold))))
+ '(font-lock-string-face ((((class color) (background light)) (:foreground "SaddleBrown"))))
+ '(mmm-code-submode-face ((t (:background "AliceBlue"))))
+ '(mmm-default-submode-face ((t (:background "AliceBlue")))))
+
+; Perl & Mason stuff
+(fset 'perl-mode 'cperl-mode)
+
+(eval-after-load "cperl-mode"
+  '(progn
+  (define-key cperl-mode-map "\C-m" 'newline-and-indent)))
+
+(defun my-html-mode-hook ()
+	(define-key html-mode-map "\C-m" 'newline-and-indent))
+(add-hook 'html-mode-hook 'my-html-mode-hook)
+
+(defun my-rmail-show-message-hook ()
+  (goto-address))
+(add-hook 'rmail-show-message-hook 'my-rmail-show-message-hook)
+
+(add-hook 'mh-show-mode-hook 'goto-address)
+(add-hook 'mh-letter-mode-hook
+          (setq flyspell-generic-check-word-p 'mail-mode-flyspell-verify))
+(add-hook 'mh-letter-mode-hook 'flyspell-mode)
+(add-hook 'mh-letter-mode-hook 'auto-fill-mode)
+(setq goto-address-mail-method 'goto-address-send-using-mhe)
+
+(require 'mmm-auto)
+(setq mmm-global-mode 'maybe)
+(setq auto-mode-alist
+      (append '(("\\.mas$" . html-mode)
+                ("\\.mhtml$" . html-mode)
+                ("\\.html$" . html-mode)
+                ("\\.comp$" . html-mode)
+                ("\\.inc$" . cperl-mode))
+              auto-mode-alist))
+(mmm-add-mode-ext-class 'html-mode "\\.mas\\'" 'mason)
+(mmm-add-mode-ext-class 'html-mode "\\.mhtml\\'" 'mason)
+(mmm-add-mode-ext-class 'html-mode "\\.html\\'" 'mason)
+
+; usefull stuff
+
+(global-set-key [mouse-3] 'imenu)
+
+(require 'bbdb)
+(bbdb-initialize 'mh-e 'sendmail 'w3 'reportmail)
+
+(ansi-color-for-comint-mode-on)
+
+(require 'flymake)
+
+; gnuserv stuff
+(require 'gnuserv-compat)
+(autoload 'gnuserv-start "gnuserv-compat"
+             "Allow this Emacs process to be a server for client processes."
+             t)
+
+; load woman at start
+(require 'woman)
+
