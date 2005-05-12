@@ -28,7 +28,6 @@
   ;; custom-set-variables was added by Custom -- don't edit or cut/paste it!
   ;; Your init file should contain only one such instance.
  '(ansi-color-for-comint-mode t)
- '(bbdb-complete-name-allow-cycling t)
  '(browse-url-generic-program "mozilla")
  '(browse-url-netscape-program "/opt/firefox/firefox")
  '(c-tab-always-indent nil)
@@ -51,10 +50,12 @@
  '(ispell-local-dictionary "british")
  '(ispell-personal-dictionary nil)
  '(message-forward-as-mime nil)
- '(mh-compose-prompt-flag nil)
- '(mh-letter-complete-function (quote bbdb-complete-name))
  '(mouse-wheel-follow-mouse t)
  '(mouse-wheel-mode t nil (mwheel))
+ '(oacs-base-dir "/web/furfly")
+ '(oacs-dbg-severity "debug")
+ '(oacs-error-log-dirs (quote ("/web/furfly/manx-dev/log" "/web/oacs-cvs/openacs-HEAD/log" "/var/log/aolserver" "/var/lib/aolserver/pump2/log")))
+ '(oacs-postgresql-version "7.4")
  '(ps-n-up-printing 2)
  '(ps-paper-type (quote a4))
  '(ps-printer-name t)
@@ -73,6 +74,7 @@
  '(tab-stop 4 t)
  '(tab-stop-list (quote (4 8 12 16 20 24 28 32 36 40 44 48 52 56 60 64)))
  '(tab-width 4)
+ '(tcl-electric-hash-style nil)
  '(tooltip-delay 1.3)
  '(transient-mark-mode t)
  '(uniquify-buffer-name-style (quote forward) nil (uniquify))
@@ -145,16 +147,62 @@
 (mmm-add-mode-ext-class 'html-mode "\\.mhtml\\'" 'mason)
 (mmm-add-mode-ext-class 'html-mode "\\.html\\'" 'mason)
 
-; usefull stuff
+(add-to-list 'load-path "/usr/share/emacs/site-lisp/mmm")
+(add-to-list 'load-path "/usr/share/emacs/site-lisp/psgml")
+(add-to-list 'load-path "/usr/share/emacs/site-lisp/oacs")
+
+;; OACS mode from thecodemill.biz
+
+(autoload 'sgml-mode "psgml" "Major mode to edit SGML files." t)
+(autoload 'xml-mode "psgml" "Major mode to edit XML files." t)
+
+;; PSGML configuration
+(require 'psgml)
+(add-to-list 'auto-mode-alist '("\\.html" . xml-mode))
+(add-to-list 'auto-mode-alist '("\\.htm" . xml-mode))
+(add-to-list 'auto-mode-alist '("\\.adp" . xml-mode))
+(add-to-list 'auto-mode-alist '("\\.xml" . xml-mode))
+(add-to-list 'auto-mode-alist '("\\.xql" . xml-mode))
+(add-to-list 'sgml-catalog-files "/usr/share/emacs/dtd/catalog")
+(setq sgml-markup-faces '((start-tag . font-lock-function-name-face)
+                            (end-tag . font-lock-function-name-face)
+                              (comment . font-lock-comment-face)
+                                (pi . bold)
+                                  (sgml . bold)
+                                    (doctype . bold)
+                                      (entity . font-lock-type-face)
+                                        (shortref . font-lock-function-name-face)))
+(setq sgml-set-face t)
+(setq-default sgml-indent-data t)
+(autoload 'sgml-mode "psgml" "Major mode to edit SGML files." t)
+(autoload 'xml-mode "psgml" "Major mode to edit XML files." t)
+(setq sgml-custom-dtd
+      '(("HTML 4.01 Transitional"
+	 "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" \"http://www.w3.org/TR/html401/loose.dtd\">")
+        ("HTML 4.01 Strict"
+	 "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">")
+        ("HTML 4.01 Frameset"
+	 "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Frameset//EN\" \"http://www.w3.org/TR/REC-html40/frameset.dtd\">")
+        ("HTML 3.2"
+	 "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 3.2 Final//EN\">")
+	("XHTML 1.0 Strict"
+	 "<?xml version=\"1.0\"?>\n<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\" \"xhtml1-strict.dtd\">" )
+	("XHTML 1.0 Transitional"
+	 "<?xml version=\"1.0\"?>\n<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"xhtml1-transitional.dtd\">" )
+	("XHTML 1.0 Frameset"
+	 "<?xml version=\"1.0\"?>\n<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Frameset//EN\" \"xhtml1-frameset.dtd\">" )
+	("XQL 1.0"
+	 "<?xml version=\"1.0\"?>\n<!DOCTYPE queryset PUBLIC \"-//OpenACS//DTD XQL 1.0//EN\" \"xql.dtd\">" )
+        ))
 
 (global-set-key [mouse-3] 'imenu)
 
-(require 'bbdb)
-(bbdb-initialize 'mh-e 'sendmail 'w3 'reportmail)
+;; (require 'bbdb)
+;; (bbdb-initialize 'mh-e 'sendmail 'w3 'reportmail)
 
 (ansi-color-for-comint-mode-on)
 
-(require 'flymake)
+(require 'oacs)
 
 ; gnuserv stuff
 (require 'gnuserv-compat)
@@ -162,6 +210,84 @@
              "Allow this Emacs process to be a server for client processes."
              t)
 
-; load woman at start
-(require 'woman)
+ 
+(require 'nsd)
+(global-set-key "\C-c\C-t" 'nsd-tail-error)
+(add-to-list 'nsd-error-log-dirs "/web/logs")
 
+(add-to-list 'auto-mode-alist '("\\.rb" . ruby-mode))
+
+; auto set exec bit if shebang
+(add-hook 'after-save-hook
+          '(lambda ()
+             (progn
+               (and (save-excursion
+                      (save-restriction
+                        (widen)
+                        (goto-char (point-min))
+                        (save-match-data
+                          (looking-at "^#!"))))
+                    (shell-command (concat "chmod u+x " buffer-file-name))
+                    (message (concat "Saved as script: " buffer-file-name))
+                    ))))
+
+(autoload 'ruby-mode "ruby-mode" "Ruby editing mode." t)
+(add-to-list 'auto-mode-alist '("\.rb$" . ruby-mode))
+(add-to-list 'interpreter-mode-alist '("ruby" . ruby-mode))
+;(require 'ruby-mode)
+;(autoload 'ruby-electric "ruby-electric-mode" "Ruby electric mode." t)
+(require 'ruby-electric)
+(defun ruby-indent ()
+  (local-set-key "\C-m" 'ruby-reindent-then-newline-and-indent))
+(add-hook 'ruby-mode-hook 'ruby-indent)
+; http://www.google.com/url?sa=D&q=http%3A%2F%2Fshylock.uw.hu%2FEmacs%2Fruby-electric.el
+(add-hook 'ruby-mode-hook 'ruby-electric-mode)
+
+;(add-hook 'ruby-mode-hook
+;  '(lambda()
+;  (define-key ruby-mode-map "\C-m" 'newline-and-indent)))
+
+
+;; eRuby
+(require 'mmm-mode)
+(setq mmm-global-mode 'maybe)
+(setq mmm-submode-decoration-level 2)
+
+
+(mmm-add-classes
+ '((eRuby-code
+    :submode ruby-mode
+;    :match-face (("<%#" . mmm-comment-submode-face)
+	;	 ("<%=" . mmm-output-submode-face)
+		; ("<%"	. mmm-code-submode-face))
+    :front "<%[#=]?"
+    :back  "%>"
+    :insert ((?% eRuby-code	  nil @ "<%"  @ " " _ " " @ "%>" @)
+	     (?# eRuby-comment	  nil @ "<%#" @ " " _ " " @ "%>" @)
+	     (?= eRuby-expression nil @ "<%=" @ " " _ " " @ "%>" @))
+    )))
+(add-hook 'html-mode-hook
+	  (lambda ()
+	    (setq mmm-classes '(eRuby-code))
+	    (mmm-mode-on)))
+(setq auto-mode-alist
+      (nconc '(("\\.rhtml$" . html-mode)) auto-mode-alist))
+
+;; (mmm-add-classes
+;;  '((ruby-heredoc
+;;     :front "<<-\\([a-zA-Z0-9_-]+\\)"
+;;     :front-offset (end-of-line 1)
+;;     :back "~1$"
+;;     :save-matches 1
+;;     :submode text-mode
+;;     :insert ((?d ruby-heredoc "Here-document Name: " @ "<<" str _ "\n"
+;;                  @ "\n" @ str "\n" @))
+;;     )))
+;; (add-hook 'ruby-mode-hook 
+;; 	  (lambda ()
+;; 	    (setq mmm-classes '(ruby-heredoc))
+;; 	    (mmm-mode-on)))
+(add-hook 'ruby-mode-hook 'turn-on-font-lock)
+
+
+;;(require 'flymake)
