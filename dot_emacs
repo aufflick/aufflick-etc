@@ -23,10 +23,13 @@
   ;; use extended compound-text coding for X clipboard
   (set-selection-coding-system 'compound-text-with-extensions))
 
+(setq cperl-invalid-face (quote off))
 
 (custom-set-variables
-  ;; custom-set-variables was added by Custom -- don't edit or cut/paste it!
+  ;; custom-set-variables was added by Custom.
+  ;; If you edit it by hand, you could mess it up, so be careful.
   ;; Your init file should contain only one such instance.
+  ;; If there is more than one, they won't work right.
  '(ansi-color-for-comint-mode t)
  '(browse-url-generic-program "mozilla")
  '(browse-url-netscape-program "/opt/firefox/firefox")
@@ -40,9 +43,19 @@
  '(cperl-font-lock t)
  '(cperl-hairy t)
  '(cperl-indent-level 4)
+ '(cperl-indent-parens-as-block t)
  '(cperl-info-on-command-no-prompt t)
  '(cperl-lazy-help-time 3)
+ '(cua-mode nil)
+ '(erc-autojoin-channels-alist (quote (("appdev02.*" "#AppDev"))))
+ '(erc-autojoin-domain-only nil)
+ '(erc-interpret-mirc-color t)
+ '(erc-modules (quote (completion services smiley tab pcomplete netsplit fill track completion ring button autojoin)))
+ '(erc-nick "marka")
+ '(erc-prompt-for-password nil)
+ '(erc-user-full-name "Mark Aufflick")
  '(flymake-allowed-file-name-masks (quote ((".+\\.c$" flymake-simple-make-init flymake-simple-cleanup flymake-get-real-file-name) (".+\\.pm$" flymake-perl-init flymake-simple-cleanup flymake-get-real-file-name) (".+\\.comp$" flymake-perl-init flymake-simple-cleanup flymake-get-real-file-name) (".+\\.pl$" flymake-perl-init flymake-simple-cleanup flymake-get-real-file-name) (".+\\.java$" flymake-simple-make-java-init flymake-simple-java-cleanup flymake-get-real-file-name) (".+[0-9]+\\.tex$" flymake-master-tex-init flymake-master-cleanup flymake-get-real-file-name) (".+\\.tex$" flymake-simple-tex-init flymake-simple-cleanup flymake-get-real-file-name) (".+\\.idl$" flymake-simple-make-init flymake-simple-cleanup flymake-get-real-file-name))))
+ '(global-font-lock-mode t nil (font-core))
  '(grep-command "find . -name \"*\" |xargs grep -n -e ")
  '(indent-tabs-mode nil)
  '(inhibit-c-tab-always-indent nil)
@@ -59,13 +72,13 @@
  '(ps-n-up-printing 2)
  '(ps-paper-type (quote a4))
  '(ps-printer-name t)
- '(rmail-enable-mime t t)
+ '(rmail-enable-mime t)
  '(rmail-movemail-program "movemail")
  '(rmail-pop-password "tifnowoo")
  '(rmail-pop-password-required t)
  '(rmail-preserve-inbox nil)
- '(rmail-primary-inbox-list (quote ("po:mark.aufflick" "/var/spool/mail/aufflick")) t)
- '(rmail-user-mail-address-regexp nil t)
+ '(rmail-primary-inbox-list (quote ("po:mark.aufflick" "/var/spool/mail/aufflick")))
+ '(rmail-user-mail-address-regexp nil)
  '(save-place t nil (saveplace))
  '(server-switch-hook (quote (raise-frame)))
  '(show-paren-mode t nil (paren))
@@ -90,6 +103,10 @@
 	(setq indent-line-function 'indent-relative-maybe))
 (add-hook 'sql-mode-hook 'my-sql-mode-hook)
 
+;;(defun my-cperl-mode-hook ()
+;;	(setq indent-tabs-mode t))
+;;(add-hook 'cperl-mode-hook 'my-cperl-mode-hook)
+
 ; OpenACS stuff
 
 (defun my-tcl-mode-hook ()
@@ -105,8 +122,10 @@
 
 
 (custom-set-faces
-  ;; custom-set-faces was added by Custom -- don't edit or cut/paste it!
+  ;; custom-set-faces was added by Custom.
+  ;; If you edit it by hand, you could mess it up, so be careful.
   ;; Your init file should contain only one such instance.
+  ;; If there is more than one, they won't work right.
  '(cperl-hash-face ((t (:background "lightyellow2" :foreground "Red" :weight bold))))
  '(font-lock-string-face ((((class color) (background light)) (:foreground "SaddleBrown"))))
  '(mmm-code-submode-face ((t (:background "AliceBlue"))))
@@ -120,7 +139,8 @@
   (define-key cperl-mode-map "\C-m" 'newline-and-indent)))
 
 (defun my-html-mode-hook ()
-	(define-key html-mode-map "\C-m" 'newline-and-indent))
+	(define-key html-mode-map "\C-m" 'newline-and-indent)
+	(setq indent-tabs-mode t))
 (add-hook 'html-mode-hook 'my-html-mode-hook)
 
 (defun my-rmail-show-message-hook ()
@@ -141,11 +161,17 @@
                 ("\\.mhtml$" . html-mode)
                 ("\\.html$" . html-mode)
                 ("\\.comp$" . html-mode)
-                ("\\.inc$" . cperl-mode))
+                ("\\.inc$" . html-mode)
+                ("\\.page$" . html-mode)
+                ("\\handler$" . html-mode))
               auto-mode-alist))
 (mmm-add-mode-ext-class 'html-mode "\\.mas\\'" 'mason)
 (mmm-add-mode-ext-class 'html-mode "\\.mhtml\\'" 'mason)
 (mmm-add-mode-ext-class 'html-mode "\\.html\\'" 'mason)
+(mmm-add-mode-ext-class 'html-mode "\\.page\\'" 'mason)
+(mmm-add-mode-ext-class 'html-mode "\\handler\\'" 'mason)
+(mmm-add-mode-ext-class 'html-mode "\\.inc\\'" 'mason)
+(mmm-add-mode-ext-class 'html-mode "\\.comp\\'" 'mason)
 
 (add-to-list 'load-path "/usr/share/emacs/site-lisp/mmm")
 (add-to-list 'load-path "/usr/share/emacs/site-lisp/psgml")
@@ -207,87 +233,76 @@
 ; gnuserv stuff
 (require 'gnuserv-compat)
 (autoload 'gnuserv-start "gnuserv-compat"
-             "Allow this Emacs process to be a server for client processes."
-             t)
+  "Allow this Emacs process to be a server for client processes."
+  t)
 
  
-(require 'nsd)
-(global-set-key "\C-c\C-t" 'nsd-tail-error)
-(add-to-list 'nsd-error-log-dirs "/web/logs")
+;(require 'nsd)
+;(global-set-key "\C-c\C-t" 'nsd-tail-error)
+;(add-to-list 'nsd-error-log-dirs "/web/logs")
 
-(add-to-list 'auto-mode-alist '("\\.rb" . ruby-mode))
-
-; auto set exec bit if shebang
-(add-hook 'after-save-hook
-          '(lambda ()
-             (progn
-               (and (save-excursion
-                      (save-restriction
-                        (widen)
-                        (goto-char (point-min))
-                        (save-match-data
-                          (looking-at "^#!"))))
-                    (shell-command (concat "chmod u+x " buffer-file-name))
-                    (message (concat "Saved as script: " buffer-file-name))
-                    ))))
-
-(autoload 'ruby-mode "ruby-mode" "Ruby editing mode." t)
-(add-to-list 'auto-mode-alist '("\.rb$" . ruby-mode))
-(add-to-list 'interpreter-mode-alist '("ruby" . ruby-mode))
-;(require 'ruby-mode)
-;(autoload 'ruby-electric "ruby-electric-mode" "Ruby electric mode." t)
-(require 'ruby-electric)
-(defun ruby-indent ()
-  (local-set-key "\C-m" 'ruby-reindent-then-newline-and-indent))
-(add-hook 'ruby-mode-hook 'ruby-indent)
-; http://www.google.com/url?sa=D&q=http%3A%2F%2Fshylock.uw.hu%2FEmacs%2Fruby-electric.el
-(add-hook 'ruby-mode-hook 'ruby-electric-mode)
-
-;(add-hook 'ruby-mode-hook
-;  '(lambda()
-;  (define-key ruby-mode-map "\C-m" 'newline-and-indent)))
-
-
-;; eRuby
-(require 'mmm-mode)
-(setq mmm-global-mode 'maybe)
-(setq mmm-submode-decoration-level 2)
-
-
-(mmm-add-classes
- '((eRuby-code
-    :submode ruby-mode
-;    :match-face (("<%#" . mmm-comment-submode-face)
-	;	 ("<%=" . mmm-output-submode-face)
-		; ("<%"	. mmm-code-submode-face))
-    :front "<%[#=]?"
-    :back  "%>"
-    :insert ((?% eRuby-code	  nil @ "<%"  @ " " _ " " @ "%>" @)
-	     (?# eRuby-comment	  nil @ "<%#" @ " " _ " " @ "%>" @)
-	     (?= eRuby-expression nil @ "<%=" @ " " _ " " @ "%>" @))
-    )))
-(add-hook 'html-mode-hook
-	  (lambda ()
-	    (setq mmm-classes '(eRuby-code))
-	    (mmm-mode-on)))
-(setq auto-mode-alist
-      (nconc '(("\\.rhtml$" . html-mode)) auto-mode-alist))
-
-;; (mmm-add-classes
-;;  '((ruby-heredoc
-;;     :front "<<-\\([a-zA-Z0-9_-]+\\)"
-;;     :front-offset (end-of-line 1)
-;;     :back "~1$"
-;;     :save-matches 1
-;;     :submode text-mode
-;;     :insert ((?d ruby-heredoc "Here-document Name: " @ "<<" str _ "\n"
-;;                  @ "\n" @ str "\n" @))
-;;     )))
-;; (add-hook 'ruby-mode-hook 
-;; 	  (lambda ()
-;; 	    (setq mmm-classes '(ruby-heredoc))
-;; 	    (mmm-mode-on)))
-(add-hook 'ruby-mode-hook 'turn-on-font-lock)
-
+;; (add-to-list 'load-path "~/opt2/share/emacs/site_lisp/erc")
+;; (require 'erc)
+;; (setq erc-echo-notices-in-minibuffer-flag t)
+;; (setq erc-auto-query t)
+;; (add-hook 'erc-mode-hook 'erc-add-scroll-to-bottom)
+;; (require 'erc-match)
+;; (setq erc-keywords '("aufflick" "mark"))
+;; (setq erc-prompt (lambda ()
+;;      (if (and (boundp 'erc-default-recipients) (erc-default-target))
+;;          (erc-propertize (concat (erc-default-target) ">") 'read-only t 'rear-nonsticky t 'front-nonsticky t)
+;;        (erc-propertize (concat "ERC>") 'read-only t 'rear-nonsticky t 'front-nonsticky t))))
+;; (setq erc-autoaway-use-emacs-idle t)
+;; (require 'erc-imenu)
+;; (require 'erc-tab)
+;; (erc-tab-mode 1)
+;; (require 'erc-nickserv)
+;; (erc-nickserv-mode 1)
+;; (setq erc-prompt-for-nickserv-password nil)
+;; (setq erc-nickserv-passwords
+;;       '((freenode     (("marka" . "passwd")
+;;                        ))
+;;         ))
 
 ;;(require 'flymake)
+
+
+(global-set-key "\C-xt" 'perltidy-region)
+(setq shell-command-default-error-buffer "perltidy-errors")
+(defun perltidy-region ()
+  "Run the perltidy parser on the current region."
+  (interactive)
+  (let ((start (mark))
+        (end (point))
+        (command "perltidy -i=4 -et=4 -syn -warning-output"))
+        (shell-command-on-region start end command t t shell-command-default-error-buffer)))
+
+
+;;my after-save-hook to cperl
+(defun myperl-check-syntax ()
+  (interactive)  
+  (if (not (equal mode-name "CPerl"))
+      ;;ignore
+      ()
+    ;;get the full path of this file
+    (setq source-full-path (buffer-file-name))
+    ;;clear the buffer of earlier error
+    (set-buffer (get-buffer-create "perlsyn"))
+    (erase-buffer)
+    ;;set the perl5lib
+    (setenv "PERL5LIB" "/home/aufflick/opt/lib/perl5/site_perl:/home/sips-ng/lib:/home/sips-ng/web_app/lib")
+    ;;execute perl -wc
+    (call-process "perl" nil "perlsyn" nil "-wc" source-full-path)
+    ;;execute podchecker
+;;    (call-process "podchecker" nil "perlsyn" nil 
+;;                                                source-full-path)
+    ;; checks if perl returned a syntax OK string
+    (if (not (equal (substring (buffer-string) -3 -1) "OK"))
+    (switch-to-buffer "perlsyn")))
+  )
+
+(add-hook 'after-save-hook 'myperl-check-syntax)
+
+; Graphviz
+(autoload 'graphviz-dot-mode "graphviz-dot-mode" "Major mode to edit GraphViz dot files." t)
+(add-to-list 'auto-mode-alist '("\\.dot" . graphviz-dot-mode))
