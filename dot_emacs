@@ -241,6 +241,82 @@
 ;(global-set-key "\C-c\C-t" 'nsd-tail-error)
 ;(add-to-list 'nsd-error-log-dirs "/web/logs")
 
+(add-to-list 'auto-mode-alist '("\\.rb" . ruby-mode))
+; auto set exec bit if shebang
+(add-hook 'after-save-hook
+          '(lambda ()
+             (progn
+               (and (save-excursion
+                      (save-restriction
+                        (widen)
+                        (goto-char (point-min))
+                        (save-match-data
+                          (looking-at "^#!"))))
+                    (shell-command (concat "chmod u+x " buffer-file-name))
+                    (message (concat "Saved as script: " buffer-file-name))
+                    ))))
+
+(autoload 'ruby-mode "ruby-mode" "Ruby editing mode." t)
+(add-to-list 'auto-mode-alist '("\.rb$" . ruby-mode))
+(add-to-list 'interpreter-mode-alist '("ruby" . ruby-mode))
+;(require 'ruby-mode)
+;(autoload 'ruby-electric "ruby-electric-mode" "Ruby electric mode." t)
+(require 'ruby-electric)
+(defun ruby-indent ()
+  (local-set-key "\C-m" 'ruby-reindent-then-newline-and-indent))
+(add-hook 'ruby-mode-hook 'ruby-indent)
+; http://www.google.com/url?sa=D&q=http%3A%2F%2Fshylock.uw.hu%2FEmacs%2Fruby-electric.el
+(add-hook 'ruby-mode-hook 'ruby-electric-mode)
+
+;(add-hook 'ruby-mode-hook
+;  '(lambda()
+;  (define-key ruby-mode-map "\C-m" 'newline-and-indent)))
+
+
+;; eRuby
+(require 'mmm-mode)
+(setq mmm-global-mode 'maybe)
+(setq mmm-submode-decoration-level 2)
+
+
+(mmm-add-classes
+ '((eRuby-code
+    :submode ruby-mode
+;    :match-face (("<%#" . mmm-comment-submode-face)
+	;	 ("<%=" . mmm-output-submode-face)
+		; ("<%"	. mmm-code-submode-face))
+    :front "<%[#=]?"
+    :back  "%>"
+    :insert ((?% eRuby-code	  nil @ "<%"  @ " " _ " " @ "%>" @)
+	     (?# eRuby-comment	  nil @ "<%#" @ " " _ " " @ "%>" @)
+	     (?= eRuby-expression nil @ "<%=" @ " " _ " " @ "%>" @))
+    )))
+(add-hook 'html-mode-hook
+	  (lambda ()
+	    (setq mmm-classes '(eRuby-code))
+	    (mmm-mode-on)))
+(setq auto-mode-alist
+      (nconc '(("\\.rhtml$" . html-mode)) auto-mode-alist))
+
+;; (mmm-add-classes
+;;  '((ruby-heredoc
+;;     :front "<<-\\([a-zA-Z0-9_-]+\\)"
+;;     :front-offset (end-of-line 1)
+;;     :back "~1$"
+;;     :save-matches 1
+;;     :submode text-mode
+;;     :insert ((?d ruby-heredoc "Here-document Name: " @ "<<" str _ "\n"
+;;                  @ "\n" @ str "\n" @))
+;;     )))
+;; (add-hook 'ruby-mode-hook 
+;; 	  (lambda ()
+;; 	    (setq mmm-classes '(ruby-heredoc))
+;; 	    (mmm-mode-on)))
+(add-hook 'ruby-mode-hook 'turn-on-font-lock)
+
+
+
+
 ;; (add-to-list 'load-path "~/opt2/share/emacs/site_lisp/erc")
 ;; (require 'erc)
 ;; (setq erc-echo-notices-in-minibuffer-flag t)
