@@ -1,19 +1,27 @@
-;; Red Hat Linux default .emacs initialization file  ; -*- mode: emacs-lisp -*-
+;; Mark Aufflick's .emacs initialization file  ; -*- mode: emacs-lisp -*-
+
+;; $Id$
 
 ;; choose which of my optional sections to use
 (setq aufflick-xterm nil)
 (setq aufflick-gnuserv t)
-(setq aufflick-erc t)
-(setq aufflick-ruby t)
+(setq aufflick-erc nil)
+(setq aufflick-ruby nil)
+(setq aufflick-use-tabs nil)
 
-;; Set up the keyboard so the delete key on both the regular keyboard
-;; and the keypad delete the character under the cursor and to the right
-;; under X, instead of the default, backspace behavior.
+;; some often-changed settings
+(setq sql-postgres-options (quote ("-p 5433" "-P" "pager=off")))
+(setq sql-postgres-program "/usr/local/pgsql74/bin/psql")
+
+;;
+;; Some generic stuff -- based on an old RedHat config
+;;
+
 (global-set-key [delete] 'delete-char)
 (global-set-key [kp-delete] 'delete-char)
 
-;; turn on font-lock mode
 (global-font-lock-mode t)
+
 ;; enable visual feedback on selections
 (setq-default transient-mark-mode t)
 
@@ -29,16 +37,27 @@
   ;; use extended compound-text coding for X clipboard
   (set-selection-coding-system 'compound-text-with-extensions))
 
-(setq cperl-invalid-face (quote off))
+;;
+;; end generic RedHat slurp
+;;
+
+;; tabs vs spaces - some people get picky about this ;)
+
+(setq indent-tabs-mode 
+      (if aufflick-use-tabs t nil))
+
+;;
+;; auto-gen custom variables
+;;
 
 (custom-set-variables
-  ;; custom-set-variables was added by Custom.
-  ;; If you edit it by hand, you could mess it up, so be careful.
-  ;; Your init file should contain only one such instance.
-  ;; If there is more than one, they won't work right.
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
  '(ansi-color-for-comint-mode t)
  '(browse-url-generic-program "mozilla" t)
- '(browse-url-netscape-program "/usr/bin/mozilla")
+ '(browse-url-netscape-program "/opt/firefox/firefox")
  '(browse-url-new-window-flag t t)
  '(c-tab-always-indent nil)
  '(case-fold-search t)
@@ -64,7 +83,6 @@
  '(flymake-allowed-file-name-masks (quote ((".+\\.c$" flymake-simple-make-init flymake-simple-cleanup flymake-get-real-file-name) (".+\\.pm$" flymake-perl-init flymake-simple-cleanup flymake-get-real-file-name) (".+\\.comp$" flymake-perl-init flymake-simple-cleanup flymake-get-real-file-name) (".+\\.pl$" flymake-perl-init flymake-simple-cleanup flymake-get-real-file-name) (".+\\.java$" flymake-simple-make-java-init flymake-simple-java-cleanup flymake-get-real-file-name) (".+[0-9]+\\.tex$" flymake-master-tex-init flymake-master-cleanup flymake-get-real-file-name) (".+\\.tex$" flymake-simple-tex-init flymake-simple-cleanup flymake-get-real-file-name) (".+\\.idl$" flymake-simple-make-init flymake-simple-cleanup flymake-get-real-file-name))))
  '(global-font-lock-mode t nil (font-core))
  '(grep-command "find . -name \"*\" |xargs grep -n -e ")
- '(indent-tabs-mode t)
  '(inhibit-c-tab-always-indent nil)
  '(ispell-dictionary-alist (quote (("british" "[A-Za-z]" "[^A-Za-z]" "[']" nil ("-B") nil iso-8859-1) ("american" "[A-Za-z]" "[^A-Za-z]" "[']" nil ("-B") nil iso-8859-1) ("brasileiro" "[A-ZÁÉÍÓÚÀÈÌÒÙÃÕÇÜÂÊÔa-záéíóúàèìòùãõçüâêô]" "[^A-ZÁÉÍÓÚÀÈÌÒÙÃÕÇÜÂÊÔa-záéíóúàèìòùãõçüâêô]" "[']" nil ("-d" "brasileiro") nil iso-8859-1) ("british" "[A-Za-z]" "[^A-Za-z]" "[']" nil ("-B" "-d" "british") nil iso-8859-1) ("castellano" "[A-ZÁÉÍÑÓÚÜa-záéíñóúü]" "[^A-ZÁÉÍÑÓÚÜa-záéíñóúü]" "[-]" nil ("-B" "-d" "castellano") "~tex" iso-8859-1) ("castellano8" "[A-ZÁÉÍÑÓÚÜa-záéíñóúü]" "[^A-ZÁÉÍÑÓÚÜa-záéíñóúü]" "[-]" nil ("-B" "-d" "castellano") "~latin1" iso-8859-1) ("czech" "[A-Za-zÁÉÌÍÓÚÙİ®©ÈØÏ«Òáéìíóúùı¾¹èøï»ò]" "[^A-Za-zÁÉÌÍÓÚÙİ®©ÈØÏ«Òáéìíóúùı¾¹èøï»ò]" "" nil ("-B" "-d" "czech") nil iso-8859-2) ("dansk" "[A-ZÆØÅa-zæøå]" "[^A-ZÆØÅa-zæøå]" "[']" nil ("-C") nil iso-8859-1) ("deutsch" "[a-zA-Z\"]" "[^a-zA-Z\"]" "[']" t ("-C") "~tex" iso-8859-1) ("deutsch8" "[a-zA-ZÄÖÜäößü]" "[^a-zA-ZÄÖÜäößü]" "[']" t ("-C" "-d" "deutsch") "~latin1" iso-8859-1) ("english" "[A-Za-z]" "[^A-Za-z]" "[']" nil ("-B") nil iso-8859-1) ("esperanto" "[A-Za-z¦¬¶¼ÆØİŞæøış]" "[^A-Za-z¦¬¶¼ÆØİŞæøış]" "[-']" t ("-C") "~latin3" iso-8859-1) ("esperanto-tex" "[A-Za-z^\\]" "[^A-Za-z^\\]" "[-'`\"]" t ("-C" "-d" "esperanto") "~tex" iso-8859-1) ("francais7" "[A-Za-z]" "[^A-Za-z]" "[`'^---]" t nil nil iso-8859-1) ("francais" "[A-Za-zÀÂÆÇÈÉÊËÎÏÔÙÛÜàâçèéêëîïôùûü]" "[^A-Za-zÀÂÆÇÈÉÊËÎÏÔÙÛÜàâçèéêëîïôùûü]" "[-']" t nil "~list" iso-8859-1) ("francais-tex" "[A-Za-zÀÂÆÇÈÉÊËÎÏÔÙÛÜàâçèéêëîïôùûü\\]" "[^A-Za-zÀÂÆÇÈÉÊËÎÏÔÙÛÜàâçèéêëîïôùûü\\]" "[-'^`\"]" t nil "~tex" iso-8859-1) ("german" "[a-zA-Z\"]" "[^a-zA-Z\"]" "[']" t ("-C") "~tex" iso-8859-1) ("german8" "[a-zA-ZÄÖÜäößü]" "[^a-zA-ZÄÖÜäößü]" "[']" t ("-C" "-d" "german") "~latin1" iso-8859-1) ("italiano" "[A-ZÀÁÈÉÌÍÒÓÙÚa-zàáèéìíóùú]" "[^A-ZÀÁÈÉÌÍÒÓÙÚa-zàáèéìíóùú]" "[-]" nil ("-B" "-d" "italian") "~tex" iso-8859-1) ("nederlands" "[A-Za-zÀ-ÅÇÈ-ÏÒ-ÖÙ-Üà-åçè-ïñò-öù-ü]" "[^A-Za-zÀ-ÅÇÈ-ÏÒ-ÖÙ-Üà-åçè-ïñò-öù-ü]" "[']" t ("-C") nil iso-8859-1) ("nederlands8" "[A-Za-zÀ-ÅÇÈ-ÏÒ-ÖÙ-Üà-åçè-ïñò-öù-ü]" "[^A-Za-zÀ-ÅÇÈ-ÏÒ-ÖÙ-Üà-åçè-ïñò-öù-ü]" "[']" t ("-C") nil iso-8859-1) ("norsk" "[A-Za-zÅÆÇÈÉÒÔØåæçèéòôø]" "[^A-Za-zÅÆÇÈÉÒÔØåæçèéòôø]" "[\"]" nil ("-d" "norsk") "~list" iso-8859-1) ("norsk7-tex" "[A-Za-z{}\\'^`]" "[^A-Za-z{}\\'^`]" "[\"]" nil ("-d" "norsk") "~plaintex" iso-8859-1) ("polish" "[A-Za-z¡£¦¬¯±³¶¼¿ÆÊÑÓæêñó]" "[^A-Za-z¡£¦¬¯±³¶¼¿ÆÊÑÓæêñó]" "" nil ("-d" "polish") nil iso-8859-2) ("russian" "[áâ÷çäå³öúéêëìíîïğòóôõæèãşûıøùÿüàñÁÂ×ÇÄÅ£ÖÚÉÊËÌÍÎÏĞÒÓÔÕÆÈÃŞÛİØÙßÜÀÑ]" "[^áâ÷çäå³öúéêëìíîïğòóôõæèãşûıøùÿüàñÁÂ×ÇÄÅ£ÖÚÉÊËÌÍÎÏĞÒÓÔÕÆÈÃŞÛİØÙßÜÀÑ]" "" nil ("-d" "russian") nil koi8-r) ("svenska" "[A-Za-zåäöéàüèæøçÅÄÖÉÀÜÈÆØÇ]" "[^A-Za-zåäöéàüèæøçÅÄÖÉÀÜÈÆØÇ]" "[']" nil ("-C") "~list" iso-8859-1) ("portugues" "[a-zA-ZÁÂÉÓàáâéêíóãú]" "[^a-zA-ZÁÂÉÓàáâéêíóãú]" "[']" t ("-C" "-d" "portugues") "~latin1" iso-8859-1) ("slovak" "[A-Za-zÁÄÉÍÓÚÔÀÅ¥İ®©ÈÏ«Òáäéíóúôàåµı¾¹èï»ò]" "[^A-Za-zÁÄÉÍÓÚÔÀÅ¥İ®©ÈÏ«Òáäéíóúôàåµı¾¹èï»ò]" "" nil ("-B" "-d" "slovak") nil iso-8859-2))))
  '(ispell-local-dictionary "british")
@@ -89,8 +107,6 @@
  '(save-place t nil (saveplace))
  '(server-switch-hook (quote (raise-frame)))
  '(show-paren-mode t nil (paren))
- '(sql-postgres-options (quote ("-p 5432" "-P" "pager=off")))
- '(sql-postgres-program "/usr/bin/psql")
  '(tab-stop 4 t)
  '(tab-stop-list (quote (4 8 12 16 20 24 28 32 36 40 44 48 52 56 60 64)))
  '(tab-width 4)
@@ -102,53 +118,55 @@
  '(user-mail-address "mark.aufflick@optusnet.com.au")
  '(vip-re-query-replace t))
 
-; SQL stuff
+										; SQL stuff
 
 (defun my-sql-mode-hook ()
-	(define-key sql-mode-map "\C-m" 'newline-and-indent)
-	(define-key sql-mode-map "\t" 'tab-to-tab-stop)
-	(setq indent-tabs-mode nil)
-	(setq indent-line-function 'indent-relative-maybe))
+  (define-key sql-mode-map "\C-m" 'newline-and-indent)
+  (define-key sql-mode-map "\t" 'tab-to-tab-stop)
+  (setq indent-tabs-mode nil)
+  (setq indent-line-function 'indent-relative-maybe))
 (add-hook 'sql-mode-hook 'my-sql-mode-hook)
 
+(setq cperl-invalid-face (quote off))
+
 (defun my-cperl-mode-hook ()
-	(setq indent-tabs-mode t))
+  (setq indent-tabs-mode t))
 (add-hook 'cperl-mode-hook 'my-cperl-mode-hook)
 
-; OpenACS stuff
+;; OpenACS stuff
 
 (defun my-tcl-mode-hook ()
-	(define-key tcl-mode-map "\C-m" 'newline-and-indent))
+  (define-key tcl-mode-map "\C-m" 'newline-and-indent))
 (add-hook 'tcl-mode-hook 'my-tcl-mode-hook)
 
 (setq auto-mode-alist
       (append '(("\\.adp$" . html-mode)
                 ("\\.tpl$" . html-mode)
-              )
+				)
               auto-mode-alist))
 
 
 
 (custom-set-faces
-  ;; custom-set-faces was added by Custom.
-  ;; If you edit it by hand, you could mess it up, so be careful.
-  ;; Your init file should contain only one such instance.
-  ;; If there is more than one, they won't work right.
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
  '(cperl-hash-face ((t (:background "lightyellow2" :foreground "Red" :weight bold))))
  '(font-lock-string-face ((((class color) (background light)) (:foreground "SaddleBrown"))))
  '(mmm-code-submode-face ((t (:background "AliceBlue"))))
  '(mmm-default-submode-face ((t (:background "AliceBlue")))))
 
-; Perl & Mason stuff
+										; Perl & Mason stuff
 (fset 'perl-mode 'cperl-mode)
 
 (eval-after-load "cperl-mode"
   '(progn
-  (define-key cperl-mode-map "\C-m" 'newline-and-indent)))
+	 (define-key cperl-mode-map "\C-m" 'newline-and-indent)))
 
 (defun my-html-mode-hook ()
-	(define-key html-mode-map "\C-m" 'newline-and-indent)
-	(setq indent-tabs-mode t))
+  (define-key html-mode-map "\C-m" 'newline-and-indent)
+  (setq indent-tabs-mode t))
 (add-hook 'html-mode-hook 'my-html-mode-hook)
 
 (defun my-rmail-show-message-hook ()
@@ -183,51 +201,51 @@
 
 (add-to-list 'load-path "/usr/share/emacs/site-lisp/mmm")
 (add-to-list 'load-path "/usr/share/emacs/site-lisp/psgml")
-;(add-to-list 'load-path "/usr/share/emacs/site-lisp/oacs")
+										;(add-to-list 'load-path "/usr/share/emacs/site-lisp/oacs")
 
 ;; OACS mode from thecodemill.biz
 
-;(autoload 'sgml-mode "psgml" "Major mode to edit SGML files." t)
-;(autoload 'xml-mode "psgml" "Major mode to edit XML files." t)
+										;(autoload 'sgml-mode "psgml" "Major mode to edit SGML files." t)
+										;(autoload 'xml-mode "psgml" "Major mode to edit XML files." t)
 
 ;; PSGML configuration
-;(require 'psgml)
-;(add-to-list 'auto-mode-alist '("\\.html" . xml-mode))
-;(add-to-list 'auto-mode-alist '("\\.htm" . xml-mode))
-;(add-to-list 'auto-mode-alist '("\\.adp" . xml-mode))
-;(add-to-list 'auto-mode-alist '("\\.xml" . xml-mode))
-;(add-to-list 'auto-mode-alist '("\\.xql" . xml-mode))
-;(add-to-list 'sgml-catalog-files "/usr/share/emacs/dtd/catalog")
-;(setq sgml-markup-faces '((start-tag . font-lock-function-name-face)
-;                            (end-tag . font-lock-function-name-face)
-;                              (comment . font-lock-comment-face)
-;                                (pi . bold)
-;                                  (sgml . bold)
-;                                    (doctype . bold)
-;                                      (entity . font-lock-type-face)
-;                                        (shortref . font-lock-function-name-face)))
-;(setq sgml-set-face t)
-;(setq-default sgml-indent-data t)
-;(autoload 'sgml-mode "psgml" "Major mode to edit SGML files." t)
-;(autoload 'xml-mode "psgml" "Major mode to edit XML files." t)
-;(setq sgml-custom-dtd
-;      '(("HTML 4.01 Transitional"
-;	 "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" \"http://www.w3.org/TR/html401/loose.dtd\">")
-;        ("HTML 4.01 Strict"
-;	 "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">")
-;        ("HTML 4.01 Frameset"
-;	 "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Frameset//EN\" \"http://www.w3.org/TR/REC-html40/frameset.dtd\">")
-;        ("HTML 3.2"
-;	 "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 3.2 Final//EN\">")
-;	("XHTML 1.0 Strict"
-;	 "<?xml version=\"1.0\"?>\n<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\" \"xhtml1-strict.dtd\">" )
-;	("XHTML 1.0 Transitional"
-;	 "<?xml version=\"1.0\"?>\n<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"xhtml1-transitional.dtd\">" )
-;	("XHTML 1.0 Frameset"
-;	 "<?xml version=\"1.0\"?>\n<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Frameset//EN\" \"xhtml1-frameset.dtd\">" )
-;	("XQL 1.0"
-;	 "<?xml version=\"1.0\"?>\n<!DOCTYPE queryset PUBLIC \"-//OpenACS//DTD XQL 1.0//EN\" \"xql.dtd\">" )
-;        ))
+										;(require 'psgml)
+										;(add-to-list 'auto-mode-alist '("\\.html" . xml-mode))
+										;(add-to-list 'auto-mode-alist '("\\.htm" . xml-mode))
+										;(add-to-list 'auto-mode-alist '("\\.adp" . xml-mode))
+										;(add-to-list 'auto-mode-alist '("\\.xml" . xml-mode))
+										;(add-to-list 'auto-mode-alist '("\\.xql" . xml-mode))
+										;(add-to-list 'sgml-catalog-files "/usr/share/emacs/dtd/catalog")
+										;(setq sgml-markup-faces '((start-tag . font-lock-function-name-face)
+										;                            (end-tag . font-lock-function-name-face)
+										;                              (comment . font-lock-comment-face)
+										;                                (pi . bold)
+										;                                  (sgml . bold)
+										;                                    (doctype . bold)
+										;                                      (entity . font-lock-type-face)
+										;                                        (shortref . font-lock-function-name-face)))
+										;(setq sgml-set-face t)
+										;(setq-default sgml-indent-data t)
+										;(autoload 'sgml-mode "psgml" "Major mode to edit SGML files." t)
+										;(autoload 'xml-mode "psgml" "Major mode to edit XML files." t)
+										;(setq sgml-custom-dtd
+										;      '(("HTML 4.01 Transitional"
+										;	 "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" \"http://www.w3.org/TR/html401/loose.dtd\">")
+										;        ("HTML 4.01 Strict"
+										;	 "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">")
+										;        ("HTML 4.01 Frameset"
+										;	 "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Frameset//EN\" \"http://www.w3.org/TR/REC-html40/frameset.dtd\">")
+										;        ("HTML 3.2"
+										;	 "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 3.2 Final//EN\">")
+										;	("XHTML 1.0 Strict"
+										;	 "<?xml version=\"1.0\"?>\n<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\" \"xhtml1-strict.dtd\">" )
+										;	("XHTML 1.0 Transitional"
+										;	 "<?xml version=\"1.0\"?>\n<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"xhtml1-transitional.dtd\">" )
+										;	("XHTML 1.0 Frameset"
+										;	 "<?xml version=\"1.0\"?>\n<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Frameset//EN\" \"xhtml1-frameset.dtd\">" )
+										;	("XQL 1.0"
+										;	 "<?xml version=\"1.0\"?>\n<!DOCTYPE queryset PUBLIC \"-//OpenACS//DTD XQL 1.0//EN\" \"xql.dtd\">" )
+										;        ))
 
 (global-set-key [mouse-3] 'imenu)
 
@@ -236,125 +254,126 @@
 
 (ansi-color-for-comint-mode-on)
 
-;(require 'oacs)
+										;(require 'oacs)
 
-; gnuserv stuff
+										; gnuserv stuff
 (if aufflick-gnuserv
 	(progn
-	 (require 'gnuserv-compat)
-	 (autoload 'gnuserv-start "gnuserv-compat"
-	   "Allow this Emacs process to be a server for client processes."
-	   t)
-	 )
-)
+	  (require 'gnuserv-compat)
+	  (autoload 'gnuserv-start "gnuserv-compat"
+		"Allow this Emacs process to be a server for client processes."
+		t)
+	  )
+  )
 
  
-;(require 'nsd)
-;(global-set-key "\C-c\C-t" 'nsd-tail-error)
-;(add-to-list 'nsd-error-log-dirs "/web/logs")
+										;(require 'nsd)
+										;(global-set-key "\C-c\C-t" 'nsd-tail-error)
+										;(add-to-list 'nsd-error-log-dirs "/web/logs")
 
 (if aufflick-erc
 	(progn
-	 (add-to-list 'load-path "~/opt2/share/emacs/site_lisp/erc")
-	 (require 'erc)
-	 (setq erc-echo-notices-in-minibuffer-flag t)
-	 (setq erc-auto-query t)
-	 (add-hook 'erc-mode-hook 'erc-add-scroll-to-bottom)
-	 (require 'erc-match)
-	 (setq erc-keywords '("aufflick" "mark"))
-	 (setq erc-prompt (lambda ()
-						(if (and (boundp 'erc-default-recipients) (erc-default-target))
-							(erc-propertize (concat (erc-default-target) ">") 'read-only t 'rear-nonsticky t 'front-nonsticky t)
-						  (erc-propertize (concat "ERC>") 'read-only t 'rear-nonsticky t 'front-nonsticky t))))
-	 (setq erc-autoaway-use-emacs-idle t)
-	 (require 'erc-imenu)
-	 (require 'erc-tab)
-	 (erc-tab-mode 1)
-	 (require 'erc-nickserv)
-	 (erc-nickserv-mode 1)
-	 (setq erc-prompt-for-nickserv-password nil)
-	 (setq erc-nickserv-passwords
-		   '((freenode     (("marka" . "passwd")
-							))
-			 ))
-	 ))
+	  (add-to-list 'load-path "~/opt2/share/emacs/site_lisp/erc")
+	  (require 'erc)
+	  (setq erc-echo-notices-in-minibuffer-flag t)
+	  (setq erc-auto-query t)
+	  (add-hook 'erc-mode-hook 'erc-add-scroll-to-bottom)
+	  (require 'erc-match)
+	  (setq erc-keywords '("aufflick" "mark"))
+	  (setq erc-prompt (lambda ()
+						 (if (and (boundp 'erc-default-recipients) (erc-default-target))
+							 (erc-propertize (concat (erc-default-target) ">") 'read-only t 'rear-nonsticky t 'front-nonsticky t)
+						   (erc-propertize (concat "ERC>") 'read-only t 'rear-nonsticky t 'front-nonsticky t))))
+	  (setq erc-autoaway-use-emacs-idle t)
+	  (require 'erc-imenu)
+	  (require 'erc-tab)
+	  (erc-tab-mode 1)
+	  (require 'erc-nickserv)
+	  (erc-nickserv-mode 1)
+	  (setq erc-prompt-for-nickserv-password nil)
+	  (setq erc-nickserv-passwords
+			'((freenode     (("marka" . "passwd")
+							 ))
+			  ))
+	  ))
 
 (if aufflick-ruby
 	(progn
 
-				   (add-to-list 'auto-mode-alist '("\\.rb" . ruby-mode))
+	  (add-to-list 'auto-mode-alist '("\\.rb" . ruby-mode))
 										; auto set exec bit if shebang
-				   (add-hook 'after-save-hook
-							 '(lambda ()
-								(progn
-								  (and (save-excursion
-										 (save-restriction
-										   (widen)
-										   (goto-char (point-min))
-										   (save-match-data
-											 (looking-at "^#!"))))
-									   (shell-command (concat "chmod u+x " buffer-file-name))
-									   (message (concat "Saved as script: " buffer-file-name))
-									   ))))
+	  (add-hook 'after-save-hook
+				'(lambda ()
+				   (progn
+					 (and (save-excursion
+							(save-restriction
+							  (widen)
+							  (goto-char (point-min))
+							  (save-match-data
+								(looking-at "^#!"))))
+						  (shell-command (concat "chmod u+x " buffer-file-name))
+						  (message (concat "Saved as script: " buffer-file-name))
+						  ))))
 
-				   (autoload 'ruby-mode "ruby-mode" "Ruby editing mode." t)
-				   (add-to-list 'auto-mode-alist '("\.rb$" . ruby-mode))
-				   (add-to-list 'interpreter-mode-alist '("ruby" . ruby-mode))
+	  (autoload 'ruby-mode "ruby-mode" "Ruby editing mode." t)
+	  (add-to-list 'auto-mode-alist '("\.rb$" . ruby-mode))
+	  (add-to-list 'interpreter-mode-alist '("ruby" . ruby-mode))
 										;(require 'ruby-mode)
 										;(autoload 'ruby-electric "ruby-electric-mode" "Ruby electric mode." t)
-				   (require 'ruby-electric)
-				   (defun ruby-indent ()
-					 (local-set-key "\C-m" 'ruby-reindent-then-newline-and-indent))
-				   (add-hook 'ruby-mode-hook 'ruby-indent)
+	  (require 'ruby-electric)
+	  (defun ruby-indent ()
+		(local-set-key "\C-m" 'ruby-reindent-then-newline-and-indent))
+	  (add-hook 'ruby-mode-hook 'ruby-indent)
 										; http://www.google.com/url?sa=D&q=http%3A%2F%2Fshylock.uw.hu%2FEmacs%2Fruby-electric.el
-				   (add-hook 'ruby-mode-hook 'ruby-electric-mode)
+	  (add-hook 'ruby-mode-hook 'ruby-electric-mode)
 				   
-				   (add-hook 'ruby-mode-hook
-							 '(lambda()
-								(define-key ruby-mode-map "\C-m" 'newline-and-indent)))
+	  (add-hook 'ruby-mode-hook
+				'(lambda()
+				   (define-key ruby-mode-map "\C-m" 'newline-and-indent)))
 
 
-				   ;; eRuby
-				   (require 'mmm-mode)
-				   (setq mmm-global-mode 'maybe)
-				   (setq mmm-submode-decoration-level 2)
+	  ;; eRuby
+	  (require 'mmm-mode)
+	  (setq mmm-global-mode 'maybe)
+	  (setq mmm-submode-decoration-level 2)
 
 
-				   (mmm-add-classes
-					'((eRuby-code
-					   :submode ruby-mode
+	  (mmm-add-classes
+	   '((eRuby-code
+		  :submode ruby-mode
 										;    :match-face (("<%#" . mmm-comment-submode-face)
 										;	 ("<%=" . mmm-output-submode-face)
 										; ("<%"	. mmm-code-submode-face))
-					   :front "<%[#=]?"
-					   :back  "%>"
-					   :insert ((?% eRuby-code	  nil @ "<%"  @ " " _ " " @ "%>" @)
-								(?# eRuby-comment	  nil @ "<%#" @ " " _ " " @ "%>" @)
-								(?= eRuby-expression nil @ "<%=" @ " " _ " " @ "%>" @))
-					   )))
-				   (add-hook 'html-mode-hook
-							 (lambda ()
-							   (setq mmm-classes '(eRuby-code))
-							   (mmm-mode-on)))
-				   (setq auto-mode-alist
-						 (nconc '(("\\.rhtml$" . html-mode)) auto-mode-alist))
+		  :front "<%[#=]?"
+		  :back  "%>"
+		  :insert ((?% eRuby-code	  nil @ "<%"  @ " " _ " " @ "%>" @)
+				   (?# eRuby-comment	  nil @ "<%#" @ " " _ " " @ "%>" @)
+				   (?= eRuby-expression nil @ "<%=" @ " " _ " " @ "%>" @))
+		  )))
+										; need to figure out how this can co-exist with mason
+;; 	  (add-hook 'html-mode-hook
+;; 				(lambda ()
+;; 				  (setq mmm-classes '(eRuby-code))
+;; 				  (mmm-mode-on)))
+;; 	  (setq auto-mode-alist
+;; 			(nconc '(("\\.rhtml$" . html-mode)) auto-mode-alist))
 
-				   (mmm-add-classes
-					'((ruby-heredoc
-					   :front "<<-\\([a-zA-Z0-9_-]+\\)"
-					   :front-offset (end-of-line 1)
-					   :back "~1$"
-					   :save-matches 1
-					   :submode text-mode
-					   :insert ((?d ruby-heredoc "Here-document Name: " @ "<<" str _ "\n"
-									@ "\n" @ str "\n" @))
-					   )))
-				   (add-hook 'ruby-mode-hook 
-							 (lambda ()
-							 (setq mmm-classes '(ruby-heredoc))
-							 (mmm-mode-on)))
-				   (add-hook 'ruby-mode-hook 'turn-on-font-lock)
-				   ))
+	  (mmm-add-classes
+	   '((ruby-heredoc
+		  :front "<<-\\([a-zA-Z0-9_-]+\\)"
+		  :front-offset (end-of-line 1)
+		  :back "~1$"
+		  :save-matches 1
+		  :submode text-mode
+		  :insert ((?d ruby-heredoc "Here-document Name: " @ "<<" str _ "\n"
+					   @ "\n" @ str "\n" @))
+		  )))
+	  (add-hook 'ruby-mode-hook 
+				(lambda ()
+				  (setq mmm-classes '(ruby-heredoc))
+				  (mmm-mode-on)))
+	  (add-hook 'ruby-mode-hook 'turn-on-font-lock)
+	  ))
 
 
 ;;(require 'flymake)
@@ -368,10 +387,10 @@
   (let ((start (mark))
         (end (point))
         (command "perltidy -i=4 -et=4 -syn -warning-output"))
-        (shell-command-on-region start end command t t shell-command-default-error-buffer)))
+	(shell-command-on-region start end command t t shell-command-default-error-buffer)))
 
 (fset 'oie-insert-display-row-template
-   [?\C-a tab ?< ?& ?  ?/ ?d ?i ?s ?p ?l ?a ?y ?_ ?r ?o ?w ?. ?i ?n ?c ?, ? ?c ?e ?l ?l ?s ?  ?= ?> ?   ?[ return tab ?  ?  ?  ?  ?[ ?  ?  ?] ?, return ?[ ?  ?  ?] ?, return backspace ?] ?  ?& ?>])
+	  [?\C-a tab ?< ?& ?  ?/ ?d ?i ?s ?p ?l ?a ?y ?_ ?r ?o ?w ?. ?i ?n ?c ?, ? ?c ?e ?l ?l ?s ?  ?= ?> ?   ?[ return tab ?  ?  ?  ?  ?[ ?  ?  ?] ?, return ?[ ?  ?  ?] ?, return backspace ?] ?  ?& ?>])
 (global-set-key "\M-or" 'oie-insert-display-row-template)
 
 ;;my after-save-hook to cperl
@@ -386,20 +405,20 @@
     (set-buffer (get-buffer-create "perlsyn"))
     (erase-buffer)
     ;;set the perl5lib
-    (setenv "PERL5LIB" "/home/aufflick/opt/lib/perl5/site_perl:/home/sips-ng/lib:/home/sips-ng/web_app/lib")
+    (setenv "PERL5LIB" "/home/sites/quadtec.com.au/perl_lib")
     ;;execute perl -wc
     (call-process "perl" nil "perlsyn" nil "-wc" source-full-path)
     ;;execute podchecker
-;;    (call-process "podchecker" nil "perlsyn" nil 
-;;                                                source-full-path)
+	;;    (call-process "podchecker" nil "perlsyn" nil 
+	;;                                                source-full-path)
     ;; checks if perl returned a syntax OK string
     (if (not (equal (substring (buffer-string) -3 -1) "OK"))
-    (switch-to-buffer "perlsyn")))
+		(switch-to-buffer "perlsyn")))
   )
 
 (add-hook 'after-save-hook 'myperl-check-syntax)
 
-; Graphviz
+										; Graphviz
 (autoload 'graphviz-dot-mode "graphviz-dot-mode" "Major mode to edit GraphViz dot files." t)
 (add-to-list 'auto-mode-alist '("\\.dot" . graphviz-dot-mode))
 
@@ -410,42 +429,42 @@
 	  (mwheel-install)
 
 
-	 (defcustom mwheel-scroll-amount '(5 . 1)
-	   "Amount to scroll windows by when spinning the mouse wheel.
+	  (defcustom mwheel-scroll-amount '(5 . 1)
+		"Amount to scroll windows by when spinning the mouse wheel.
 This is actually a cons cell, where the first item is the amount to scroll
 on a normal wheel event, and the second is the amount to scroll when the
 wheel is moved with the shift key depressed.
 This should be the number of lines to scroll, or `nil' for near
 full screen.
 A near full screen is `next-screen-context-lines' less than a full screen."
-	   :group 'mouse
-	   :type '(cons
-			   (choice :tag "Normal"
-					   (const :tag "Full screen" :value nil)
-					   (integer :tag "Specific # of lines"))
-			   (choice :tag "Shifted"
-					   (const :tag "Full screen" :value nil)
-					   (integer :tag "Specific # of lines"))))
+		:group 'mouse
+		:type '(cons
+				(choice :tag "Normal"
+						(const :tag "Full screen" :value nil)
+						(integer :tag "Specific # of lines"))
+				(choice :tag "Shifted"
+						(const :tag "Full screen" :value nil)
+						(integer :tag "Specific # of lines"))))
 
-	 (defcustom mwheel-follow-mouse t
-	   "Whether the mouse wheel should scroll the window that the mouse is over.
+	  (defcustom mwheel-follow-mouse t
+		"Whether the mouse wheel should scroll the window that the mouse is over.
 This can be slightly disconcerting, but some people may prefer it."
-	   :group 'mouse
-	   :type 'boolean)
+		:group 'mouse
+		:type 'boolean)
 
-	 (defun mwheel-scroll (event)
-	   (interactive "e")
-	   (let ((curwin (if mwheel-follow-mouse
-						 (prog1
-							 (selected-window)
-						   (select-window (mwheel-event-window event)))))
-			 (amt (if (memq 'shift (event-modifiers event))
-					  (cdr mwheel-scroll-amount)
-					(car mwheel-scroll-amount))))
-		 (case (mwheel-event-button event)
-		   (mouse-4 (scroll-down amt))
-		   (mouse-5 (scroll-up amt))
-		   (otherwise (error "Bad binding in mwheel-scroll")))
-		 (if curwin (select-window curwin))))
-	 )									; end if aufflick-xterm
-)
+	  (defun mwheel-scroll (event)
+		(interactive "e")
+		(let ((curwin (if mwheel-follow-mouse
+						  (prog1
+							  (selected-window)
+							(select-window (mwheel-event-window event)))))
+			  (amt (if (memq 'shift (event-modifiers event))
+					   (cdr mwheel-scroll-amount)
+					 (car mwheel-scroll-amount))))
+		  (case (mwheel-event-button event)
+			(mouse-4 (scroll-down amt))
+			(mouse-5 (scroll-up amt))
+			(otherwise (error "Bad binding in mwheel-scroll")))
+		  (if curwin (select-window curwin))))
+	  )									; end if aufflick-xterm
+  )
