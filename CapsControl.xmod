@@ -1,0 +1,13 @@
+!
+! Make both Caps_Lock and Control_L produce Control
+!
+remove Lock = Caps_Lock
+remove Control = Control_L
+keysym Control_L = Control_L
+keysym Caps_Lock = Control_L
+add Lock = Caps_Lock
+add Control = Control_L
+
+keycode 222 = F13
+keycode 223 = F14
+keycode 227 = F15
